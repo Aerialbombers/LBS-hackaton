@@ -31,6 +31,11 @@ window.addEventListener('DOMContentLoaded', () => {
     const workInput = document.getElementById('workDuration');
     const breakInput = document.getElementById('breakDuration');
 
+    // modal/nav elements
+    const pomodoroNavBtn = document.getElementById('pomodoroNavBtn');
+    const pomodoroModal = document.getElementById('pomodoroModal');
+    const modalClose = document.getElementById('modalClose');
+
     // durations in seconds - will be updated based on inputs
     let workTime = 25 * 60;   // seconds
     let breakTime = 5 * 60;   // seconds
@@ -149,4 +154,34 @@ window.addEventListener('DOMContentLoaded', () => {
     // sync initial values
     updateDurations();
     updateDisplay();
+
+    // --- modal behavior ----------------------------------------------------
+    function showModal() {
+        if (pomodoroModal) pomodoroModal.classList.remove('hidden');
+    }
+    function hideModal() {
+        if (pomodoroModal) pomodoroModal.classList.add('hidden');
+    }
+
+    if (pomodoroNavBtn) {
+        pomodoroNavBtn.addEventListener('click', () => {
+            // toggle visibility
+            if (pomodoroModal && pomodoroModal.classList.contains('hidden')) {
+                showModal();
+            } else {
+                hideModal();
+            }
+        });
+    }
+
+    if (modalClose) {
+        modalClose.addEventListener('click', hideModal);
+    }
+
+    // close when clicking outside content
+    if (pomodoroModal) {
+        pomodoroModal.addEventListener('click', (e) => {
+            if (e.target === pomodoroModal) hideModal();
+        });
+    }
 });
