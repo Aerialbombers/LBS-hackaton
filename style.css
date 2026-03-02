@@ -15,11 +15,48 @@ nav {
 
 }
 
-div.input-text {
+.input-text {
     width: 200px;
     padding: 5px;
     margin: 5px;
     border: 1px solid black;
     border-radius: 2px;
-    color: black;
+    
+}
+
+/* Pomodoro timer styling */
+#pomodoro {
+    margin-top: 30px;
+    text-align: center;
+}
+
+#timer {
+    font-size: 2em;
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+
+button.pomo-btn {
+    margin: 0 5px;
+    padding: 8px 16px;
+    font-size: 1em;
+    cursor: pointer;
+}
+
+button.pomo-btn:hover {
+    background-color: #eee;
+}
+
+/* duration input styling */
+#settings {
+    margin-bottom: 10px;
+}
+
+#settings label {
+    margin-right: 15px;
+    font-size: 0.9em;
+}
+
+#settings input {
+    width: 50px;
 }

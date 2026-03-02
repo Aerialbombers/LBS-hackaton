@@ -15,7 +15,25 @@
     <button id="saveButton">Spara Schema</button>
     <button id="loadButton">Ladda Schema</button>
 
+    <!-- Pomodoro clock section -->
+    <section id="pomodoro">
+        <h2>Pomodoro Timer</h2>
+        <!-- custom duration controls -->
+        <div id="settings">
+            <label>
+                Arbetsminuter:
+                <input type="number" id="workDuration" min="1" value="25"> min
+            </label>
+            <label>
+                Pausminuter:
+                <input type="number" id="breakDuration" min="1" value="5"> min
+            </label>
+        </div>
+        <div id="timer">25:00</div>
+        <button id="startPauseBtn" class="pomo-btn">Start</button>
+        <button id="resetBtn" class="pomo-btn">Reset</button>
+    </section>
+
     <script src="script.js"></script>
-
-
+</body>
 </html>
