@@ -103,11 +103,15 @@ nav {
     font-family: sans-serif;
     margin: auto;
     padding: 10px;
-    text-align: center;
+    /* use flex so items can be aligned */
+    display: flex;
+    align-items: center;
+    justify-content: flex-end; /* push buttons to right edge */
 }
 
 nav button {
     padding: 5px 10px;
     font-size: 1em;
     cursor: pointer;
+    /* any button in nav will sit on the right due to flex layout */
 }
