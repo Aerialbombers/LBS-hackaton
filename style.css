@@ -123,7 +123,8 @@ nav button {
 .schedule-container {
     position: fixed;
     bottom: 5px;
-    left: 5px;
+    left: 50%;
+    transform: translateX(-50%);
     background: lightblue; /* match nav bar color */
     padding: 10px;
     border: 1px solid black;
@@ -139,6 +140,37 @@ nav button {
 .schedule-container .input-text {
     width: 200px;
     margin-bottom: 5px;
+}
+
+.schedule-display {
+    margin-top: 8px;
+    font-size: 0.9em;
+    white-space: pre-wrap; /* preserve line breaks */
+    text-align: left;
+}
+
+/* schedule table styling */
+#scheduleTable {
+    border-collapse: collapse;
+    width: 100%;
+    margin-bottom: 5px;
+}
+
+#scheduleTable th, #scheduleTable td {
+    border: 1px solid #999;
+    padding: 4px;
+    text-align: center;
+}
+
+#scheduleTable input.subj {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 2px;
+}
+
+#addRowButton {
+    display: inline-block;
+    margin-left: 10px;
 }
 
 .schedule-container button {

@@ -3,26 +3,104 @@
 // Wait until DOM is loaded
 window.addEventListener('DOMContentLoaded', () => {
     // --- schedule storage --------------------------------------------------
-    const inputDiv = document.querySelector('.input-text');
+    // elements for schedule table
+    const scheduleTable = document.getElementById('scheduleTable');
     const saveButton = document.getElementById('saveButton');
     const loadButton = document.getElementById('loadButton');
+    const addRowButton = document.getElementById('addRowButton');
+    const scheduleDisplay = document.getElementById('scheduleDisplay');
     const skipButton = document.getElementById('skipButton');
+
+    // convert table into an array-of-rows containing cell values
+    function serializeTable() {
+        const data = [];
+        if (!scheduleTable) return data;
+        const rows = scheduleTable.querySelectorAll('tbody tr');
+        rows.forEach((row) => {
+            const cells = row.querySelectorAll('td input.subj');
+            const values = [];
+            cells.forEach(cell => values.push(cell.value));
+            data.push(values);
+        });
+        return data;
+    }
+
+    // populate table from data array
+    function populateTable(data) {
+        if (!scheduleTable) return;
+        const tbody = scheduleTable.querySelector('tbody');
+        tbody.innerHTML = ''; // clear
+        data.forEach((rowVals, idx) => {
+            const tr = document.createElement('tr');
+            const periodCell = document.createElement('td');
+            periodCell.textContent = idx + 1;
+            tr.appendChild(periodCell);
+            rowVals.forEach(val => {
+                const td = document.createElement('td');
+                const inp = document.createElement('input');
+                inp.type = 'text';
+                inp.className = 'subj';
+                inp.value = val;
+                td.appendChild(inp);
+                tr.appendChild(td);
+            });
+            tbody.appendChild(tr);
+        });
+    }
+
+    function refreshScheduleDisplay() {
+        if (scheduleDisplay) {
+            const data = JSON.parse(localStorage.getItem('schedule') || '[]');
+            // make a simple text representation
+            let text = '';
+            data.forEach((row, i) => {
+                text += `Period ${i+1}: ` + row.join(' | ') + '\n';
+            });
+            scheduleDisplay.textContent = text;
+        }
+    }
 
     if (saveButton) {
         saveButton.addEventListener('click', () => {
-            localStorage.setItem('schedule', inputDiv.innerText);
+            const data = serializeTable();
+            localStorage.setItem('schedule', JSON.stringify(data));
             alert('Schema sparat!');
+            refreshScheduleDisplay();
         });
     }
 
     if (loadButton) {
         loadButton.addEventListener('click', () => {
-            const stored = localStorage.getItem('schedule');
-            if (stored !== null) {
-                inputDiv.innerText = stored;
-            }
+            const stored = JSON.parse(localStorage.getItem('schedule') || '[]');
+            populateTable(stored);
+            refreshScheduleDisplay();
         });
     }
+
+    if (addRowButton) {
+        addRowButton.addEventListener('click', () => {
+            if (!scheduleTable) return;
+            const tbody = scheduleTable.querySelector('tbody');
+            const newRow = document.createElement('tr');
+            const periodCell = document.createElement('td');
+            periodCell.textContent = tbody.children.length + 1;
+            newRow.appendChild(periodCell);
+            for (let i = 0; i < 5; i++) {
+                const td = document.createElement('td');
+                const inp = document.createElement('input');
+                inp.type = 'text';
+                inp.className = 'subj';
+                td.appendChild(inp);
+                newRow.appendChild(td);
+            }
+            tbody.appendChild(newRow);
+        });
+    }
+
+    // show whatever is already stored when page loads
+    const initialData = JSON.parse(localStorage.getItem('schedule') || '[]');
+    if (initialData.length) populateTable(initialData);
+    refreshScheduleDisplay();
 
     // --- pomodoro timer -----------------------------------------------------
     const timerDisplay = document.getElementById('timer');
