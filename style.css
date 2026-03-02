@@ -1,7 +1,8 @@
 body {
 font-size: 16px;
 font-family: 'Times New Roman';
-
+color: black;
+background-color: white;
 }
 
 nav {
@@ -11,5 +12,5 @@ nav {
     margin: auto;
     padding: 10px;
     text-align: center;
-    
+
 }
