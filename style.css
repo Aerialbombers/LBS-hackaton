@@ -14,3 +14,12 @@ nav {
     text-align: center;
 
 }
+
+div.input-text {
+    width: 200px;
+    padding: 5px;
+    margin: 5px;
+    border: 1px solid black;
+    border-radius: 2px;
+    color: black;
+}
