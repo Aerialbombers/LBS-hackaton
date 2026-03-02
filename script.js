@@ -6,6 +6,7 @@ window.addEventListener('DOMContentLoaded', () => {
     const inputDiv = document.querySelector('.input-text');
     const saveButton = document.getElementById('saveButton');
     const loadButton = document.getElementById('loadButton');
+    const skipButton = document.getElementById('skipButton');
 
     if (saveButton) {
         saveButton.addEventListener('click', () => {
@@ -70,6 +71,7 @@ window.addEventListener('DOMContentLoaded', () => {
         isWork = !isWork;
         currentTime = isWork ? workTime : breakTime;
         updateDisplay();
+        updateSkipText();
     }
 
     function tick() {
@@ -116,6 +118,33 @@ window.addEventListener('DOMContentLoaded', () => {
             if (startPauseBtn) startPauseBtn.textContent = 'Start';
         });
     }
+
+    // skip current period and start the next one immediately
+    if (skipButton) {
+        skipButton.addEventListener('click', () => {
+            // if timer running, stop it before switching
+            if (running) {
+                clearInterval(timerInterval);
+            }
+            // switch periods regardless of work/break
+            switchPeriod();
+            // restart timer if it was running
+            if (running) {
+                timerInterval = setInterval(tick, 1000);
+            }
+            // update button text to reflect new state
+            updateSkipText();
+        });
+    }
+
+    function updateSkipText() {
+        if (!skipButton) return;
+        // when on a break period, label invites skipping the break
+        skipButton.textContent = isWork ? 'Hoppa över arbetsperiod' : 'Hoppa över paus';
+    }
+
+    // call on state changes
+    updateSkipText();
 
     // sync initial values
     updateDurations();
