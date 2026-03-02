@@ -15,13 +15,16 @@ nav {
     margin: 0px;
 }
 
+
+
 .input-text {
     width: 200px;
     padding: 5px;
     margin: 5px;
     border: 1px solid black;
     border-radius: 2px;
-    
+    background-color: white;
+
 }
 
 /* Pomodoro timer styling */
@@ -114,4 +117,41 @@ nav button {
     font-size: 1em;
     cursor: pointer;
     /* any button in nav will sit on the right due to flex layout */
+}
+
+/* schedule input fixed at bottom-left */
+.schedule-container {
+    position: fixed;
+    bottom: 5px;
+    left: 5px;
+    background: lightblue; /* match nav bar color */
+    padding: 10px;
+    border: 1px solid black;
+    border-radius: 4px;
+    z-index: 500;
+    box-shadow: 0 0 5px rgba(0,0,0,0.2);
+    text-align: center; /* center inner inline elements */
+}
+
+.schedule-container button {
+    margin: 0 5px;
+}
+.schedule-container .input-text {
+    width: 200px;
+    margin-bottom: 5px;
+}
+
+.schedule-container button {
+    display: inline-block; /* sit side by side */
+    margin: 0 5px;
+}
+
+
+.schedule-container h1 {
+    margin: 0px;
+    text-align: center;
+}
+.schedule-container p {
+    margin: 5px 0;
+    text-align: center;
 }
