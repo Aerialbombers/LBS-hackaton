@@ -1,6 +1,6 @@
 body {
 font-size: 16px;
-font-family: 'Times New Roman';
+font-family: 'Courier New';
 color: black;
 background-color: #cef4ff;
 }
@@ -8,7 +8,7 @@ background-color: #cef4ff;
 nav {
     background-color: lightblue;
     font-size: 16px;
-    font-family: sans-serif;
+    font-family: 'CourierNew';
     margin: auto;
     padding: 0px;
     text-align: center;
@@ -103,7 +103,7 @@ button.pomo-btn:hover {
 nav {
     background-color: lightblue;
     font-size: 16px;
-    font-family: sans-serif;
+    font-family: 'Courier New';
     margin: auto;
     padding: 10px;
     /* use flex so items can be aligned */
