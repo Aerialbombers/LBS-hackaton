@@ -2,6 +2,82 @@
 
 // Wait until DOM is loaded
 window.addEventListener('DOMContentLoaded', () => {
+    // --- week management --------------------------------------------------
+    let currentWeekStart = getMonday(new Date());
+    
+    function getMonday(date) {
+        const d = new Date(date);
+        const day = d.getDay();
+        const diff = d.getDate() - day + (day === 0 ? -6 : 1);
+        return new Date(d.setDate(diff));
+    }
+
+    function getISOWeekNumber(date) {
+        const d = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
+        const dayNum = d.getUTCDay() || 7;
+        d.setUTCDate(d.getUTCDate() + 4 - dayNum);
+        const yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
+        return Math.ceil((((d - yearStart) / 86400000) + 1) / 7);
+    }
+
+    function formatWeek(date) {
+        const week = getISOWeekNumber(date);
+        const endDate = new Date(date);
+        endDate.setDate(endDate.getDate() + 4);
+        const monthNames = ['jan', 'feb', 'mars', 'april', 'maj', 'juni', 'juli', 'aug', 'sep', 'okt', 'nov', 'dec'];
+        const startMonth = monthNames[date.getMonth()];
+        const endMonth = monthNames[endDate.getMonth()];
+        const year = date.getFullYear();
+        return `Vecka ${week}, ${startMonth}. - ${endMonth} ${year}`;
+    }
+
+    function updateWeekDisplay() {
+        const weekDisplay = document.getElementById('weekDisplay');
+        if (weekDisplay) {
+            weekDisplay.textContent = formatWeek(currentWeekStart);
+        }
+        updateDayHeaders();
+    }
+
+    function updateDayHeaders() {
+        const dayHeaders = document.querySelectorAll('.day-header');
+        const dayNames = ['mån', 'tis', 'ons', 'tors', 'fre'];
+        for (let i = 0; i < 5; i++) {
+            const date = new Date(currentWeekStart);
+            date.setDate(date.getDate() + i);
+            const dayNum = date.getDate();
+            const header = dayHeaders[i];
+            if (header) {
+                const nameEl = header.querySelector('.day-name');
+                const numEl = header.querySelector('.day-num');
+                if (nameEl) nameEl.textContent = dayNames[i];
+                if (numEl) numEl.textContent = dayNum;
+            }
+        }
+    }
+
+    const prevWeekBtn = document.getElementById('prevWeek');
+    const nextWeekBtn = document.getElementById('nextWeek');
+    const toggleSidebarBtn = document.getElementById('toggleSidebar');
+    const sidebar = document.querySelector('.sidebar');
+    if (prevWeekBtn) {
+        prevWeekBtn.addEventListener('click', () => {
+            currentWeekStart.setDate(currentWeekStart.getDate() - 7);
+            updateWeekDisplay();
+        });
+    }
+    if (nextWeekBtn) {
+        nextWeekBtn.addEventListener('click', () => {
+            currentWeekStart.setDate(currentWeekStart.getDate() + 7);
+            updateWeekDisplay();
+        });
+    }
+    if (toggleSidebarBtn) {
+        toggleSidebarBtn.addEventListener('click', () => {
+            if (sidebar) sidebar.classList.toggle('hidden');
+        });
+    }
+
     // --- schedule storage --------------------------------------------------
     const scheduleTable = document.getElementById('scheduleTable');
     const saveButton = document.getElementById('saveButton');
@@ -10,7 +86,7 @@ window.addEventListener('DOMContentLoaded', () => {
     const scheduleresetbutton = document.getElementById('scheduleresetbutton');
 
     // hours for schedule left column
-    const times = ['06:00','07:00','08:00','09:00','10:00','11:00','12:00','13:00','14:00','15:00','16:00','17:00','18:00'];
+    const times = ['00:00','01:00','02:00','03:00','04:00','05:00','06:00','07:00','08:00','09:00','10:00','11:00','12:00','13:00','14:00','15:00','16:00','17:00','18:00','19:00','20:00','21:00','22:00','23:00'];
 
     function ensureTimeRows() {
         if (!scheduleTable) return;
@@ -113,9 +189,22 @@ window.addEventListener('DOMContentLoaded', () => {
     if (scheduleresetbutton) {
         scheduleresetbutton.addEventListener('click', () => {
             if (confirm('Är du säker på att du vill rensa schemat? Detta kan inte ångras.')) {
-                localStorage.removeItem('schedule');
-                const tbody = scheduleTable.querySelector('tbody');
-                tbody.innerHTML = '';
+                // Clear all cells visually
+                const cells = scheduleTable.querySelectorAll('.sched-cell');
+                cells.forEach(cell => {
+                    cell.setAttribute('data-subj', '');
+                    cell.setAttribute('data-color', '#ffffff');
+                    cell.style.backgroundColor = '#ffffff';
+                });
+                // Save empty schedule for 5 days
+                const emptyData = times.map(() => [
+                    {text:'', color:'#ffffff'},
+                    {text:'', color:'#ffffff'},
+                    {text:'', color:'#ffffff'},
+                    {text:'', color:'#ffffff'},
+                    {text:'', color:'#ffffff'}
+                ]);
+                localStorage.setItem('schedule', JSON.stringify(emptyData));
             }
         });
     }
@@ -339,4 +428,94 @@ window.addEventListener('DOMContentLoaded', () => {
             if (e.target === pomodoroModal) hideModal();
         });
     }
+
+    // --- calendar functionality -------------------------------------------
+    const scheduleViewBtn = document.getElementById('scheduleViewBtn');
+    const calendarViewBtn = document.getElementById('calendarViewBtn');
+    const weeklyView = document.getElementById('weeklyView');
+    const calendarView = document.getElementById('calendarView');
+    const prevMonthBtn = document.getElementById('prevMonth');
+    const nextMonthBtn = document.getElementById('nextMonth');
+    const calendarBody = document.getElementById('calendarBody');
+    const monthYearDisplay = document.getElementById('monthYear');
+
+    let calendarData = JSON.parse(localStorage.getItem('calendarData') || '{}');
+    let currentCalendarMonth = new Date().getMonth();
+    let currentCalendarYear = new Date().getFullYear();
+    let selectedDate = null;
+
+    function getDateKey(date) {
+        return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+    }
+
+    // --- mini calendar in sidebar ------------------------------------------
+    const miniCalendarBody = document.getElementById('miniCalendarBody');
+    const miniMonthYear = document.getElementById('miniMonthYear');
+    const miniPrevMonth = document.getElementById('miniPrevMonth');
+    const miniNextMonth = document.getElementById('miniNextMonth');
+
+    let miniMonth = new Date().getMonth();
+    let miniYear = new Date().getFullYear();
+
+    function renderMiniCalendar() {
+        const firstDay = new Date(miniYear, miniMonth, 1);
+        const lastDay = new Date(miniYear, miniMonth + 1, 0);
+        const daysInMonth = lastDay.getDate();
+        const startingDayOfWeek = firstDay.getDay();
+
+        const monthNames = ['january', 'februar', 'mars', 'april', 'maj', 'juni', 'juli', 'augsti', 'september', 'oktober', 'november', 'december'];
+        miniMonthYear.textContent = `${monthNames[miniMonth]} ${miniYear}`;
+        miniCalendarBody.innerHTML = '';
+
+        let date = 1;
+        for (let i = 0; i < 6; i++) {
+            const row = document.createElement('tr');
+            for (let j = 0; j < 7; j++) {
+                const cell = document.createElement('td');
+                if ((i === 0 && j < startingDayOfWeek) || date > daysInMonth) {
+                    cell.classList.add('other-month');
+                } else {
+                    const dateObj = new Date(miniYear, miniMonth, date);
+                    const today = new Date();
+                    if (dateObj.toDateString() === today.toDateString()) {
+                        cell.classList.add('today');
+                    }
+                    cell.textContent = date;
+                    cell.addEventListener('click', () => {
+                        currentWeekStart = getMonday(dateObj);
+                        updateWeekDisplay();
+                    });
+                    date++;
+                }
+                row.appendChild(cell);
+            }
+            miniCalendarBody.appendChild(row);
+        }
+    }
+
+    if (miniPrevMonth) {
+        miniPrevMonth.addEventListener('click', () => {
+            miniMonth--;
+            if (miniMonth < 0) {
+                miniMonth = 11;
+                miniYear--;
+            }
+            renderMiniCalendar();
+        });
+    }
+
+    if (miniNextMonth) {
+        miniNextMonth.addEventListener('click', () => {
+            miniMonth++;
+            if (miniMonth > 11) {
+                miniMonth = 0;
+                miniYear++;
+            }
+            renderMiniCalendar();
+        });
+    }
+
+    // Initial render
+    renderMiniCalendar();
+    updateWeekDisplay();
 });
