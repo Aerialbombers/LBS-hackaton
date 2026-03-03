@@ -124,7 +124,7 @@ nav button {
     bottom: 5px;
     left: 50%;
     transform: translateX(-50%);
-    background: lightblue; /* match nav bar color */
+    background: #a4ac86; /* match nav bar color */
     padding: 10px;
     border: 1px solid black;
     border-radius: 4px;
