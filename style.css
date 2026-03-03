@@ -301,8 +301,7 @@ nav button:hover {
 }
 
 /* Pomodoro timer styling */
-#pomodoro {
-    margin-top: 30px;
+#pomodoro { 
     text-align: center;
 }
 
@@ -317,6 +316,7 @@ button.pomo-btn {
     padding: 8px 16px;
     font-size: 1em;
     cursor: pointer;
+    font-family: 'Courier New';
 }
 
 button.pomo-btn:hover {
@@ -370,6 +370,82 @@ button.pomo-btn:hover {
     right: 10px;
     cursor: pointer;
     font-size: 1.5em;
+}
+
+/* nav button styling */
+nav {
+    background-color: #a4ac86;
+    font-size: 16px;
+    font-family: 'Courier New';
+    margin: auto;
+    padding: 10px;
+    /* use flex so items can be aligned */
+    display: flex;
+    align-items: center;
+    justify-content: flex-end; /* push buttons to right edge */
+}
+
+nav button {
+    padding: 5px 10px;
+    font-size: 1em;
+    cursor: pointer;
+    /* any button in nav will sit on the right due to flex layout */
+}
+
+/* schedule input fixed at bottom-left */
+.schedule-container {
+    position: fixed;
+    bottom: 5px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #a4ac86; /* match nav bar color */
+    padding: 10px;
+    border: 1.5px solid black;
+    border-radius: 4px;
+    z-index: 500;
+    box-shadow: 0 0 5px rgba(0,0,0,0.2);
+    text-align: center; /* center inner inline elements */
+}
+
+.schedule-container button {
+    margin: 0 5px;
+}
+.schedule-container .input-text {
+    width: 200px;
+    margin-bottom: 5px;
+}
+
+/* schedule table styling */
+#scheduleTable {
+    border-collapse: collapse;
+    width: 100%;
+    margin-bottom: 5px;
+    table-layout: fixed; /* distribute columns evenly */
+}
+
+/* keep time column narrow */
+#scheduleTable td:first-child,
+#scheduleTable th:first-child {
+    width: 60px;
+    white-space: nowrap;
+}
+
+/* cells display subject and background color */
+.sched-cell {
+    min-width: 80px;
+    min-height: 30px;
+    cursor: pointer;
+    vertical-align: middle;
+}
+
+.sched-cell::after {
+    content: attr(data-subj);
+    display: block;
+    width: 100%;
+    height: 100%;
+    padding: 2px;
+    box-sizing: border-box;
+    text-align: center;
 }
 
 /* cell edit modal adjustments */
