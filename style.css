@@ -165,8 +165,13 @@ nav button:hover {
 
 .schedule-wrapper {
     flex: 1;
-    overflow: auto;
+    overflow-x: auto;
+    overflow-y: hidden;
     background-color: white;
+}
+
+.schedule-table {
+    min-width: 700px; /* ensure at least five day columns are visible */
 }
 
 .schedule-table {
