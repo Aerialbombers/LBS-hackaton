@@ -79,7 +79,8 @@ window.addEventListener('DOMContentLoaded', () => {
     }
 
     // --- schedule storage --------------------------------------------------
-    const scheduleTable = document.getElementById('scheduleTable');
+    const daysContainer = document.getElementById('daysContainer');
+    const timeColumn = document.getElementById('timeColumn');
     const saveButton = document.getElementById('saveButton');
     const loadButton = document.getElementById('loadButton');
     const skipButton = document.getElementById('skipButton');
@@ -88,69 +89,78 @@ window.addEventListener('DOMContentLoaded', () => {
     // hours for schedule left column
     const times = ['00:00','01:00','02:00','03:00','04:00','05:00','06:00','07:00','08:00','09:00','10:00','11:00','12:00','13:00','14:00','15:00','16:00','17:00','18:00','19:00','20:00','21:00','22:00','23:00'];
 
-    function ensureTimeRows() {
-        if (!scheduleTable) return;
-        const tbody = scheduleTable.querySelector('tbody');
-        if (tbody.children.length > 0) return; // already built
+    // create per-day tables and time column
+    function ensureDayTables() {
+        if (!daysContainer || !timeColumn) return;
+        if (daysContainer.children.length > 0) return; // already built
+
+        // build time column labels
         times.forEach(t => {
-            const tr = document.createElement('tr');
-            const timeTd = document.createElement('td');
-            timeTd.textContent = t;
-            tr.appendChild(timeTd);
-            for (let i = 0; i < 5; i++) {
-                const td = document.createElement('td');
-                td.className = 'sched-cell';
-                td.setAttribute('data-subj', '');
-                td.setAttribute('data-color', '#ffffff');
-                td.style.backgroundColor = '#ffffff';
-                tr.appendChild(td);
-            }
-            tbody.appendChild(tr);
+            const div = document.createElement('div');
+            div.className = 'time-cell';
+            div.textContent = t;
+            timeColumn.appendChild(div);
         });
+
+        for (let d = 0; d < 5; d++) {
+            const table = document.createElement('table');
+            table.className = 'day-table';
+            table.setAttribute('data-day', d);
+            const tbody = document.createElement('tbody');
+            times.forEach(() => {
+                const tr = document.createElement('tr');
+                const td = document.createElement('td');
+                const cell = document.createElement('div');
+                cell.className = 'day-cell';
+                cell.setAttribute('data-subj', '');
+                cell.setAttribute('data-color', '#ffffff');
+                cell.style.backgroundColor = '#ffffff';
+                td.appendChild(cell);
+                tr.appendChild(td);
+                tbody.appendChild(tr);
+            });
+            table.appendChild(tbody);
+            daysContainer.appendChild(table);
+        }
     }
 
-    // serialization based on data attributes of cells (skip time column)
+    // serialization: return array of rows (times) each with 5 day objects
     function serializeTable() {
         const data = [];
-        if (!scheduleTable) return data;
-        const rows = scheduleTable.querySelectorAll('tbody tr');
-        rows.forEach((row) => {
-            const vals = [];
-            // skip first cell (time)
-            const cells = row.querySelectorAll('td');
-            cells.forEach((td, idx) => {
-                if (idx === 0) return;
-                vals.push({
-                    text: td.getAttribute('data-subj') || '',
-                    color: td.getAttribute('data-color') || '#ffffff'
+        if (!daysContainer) return data;
+        ensureDayTables();
+        const dayTables = daysContainer.querySelectorAll('.day-table');
+        for (let ti = 0; ti < times.length; ti++) {
+            const rowVals = [];
+            for (let d = 0; d < dayTables.length; d++) {
+                const tr = dayTables[d].querySelectorAll('tbody tr')[ti];
+                const cell = tr.querySelector('.day-cell');
+                rowVals.push({
+                    text: cell.getAttribute('data-subj') || '',
+                    color: cell.getAttribute('data-color') || '#ffffff'
                 });
-            });
-            data.push(vals);
-        });
+            }
+            data.push(rowVals);
+        }
         return data;
     }
 
-    // populate table from saved data (array of arrays)
     function populateTable(data) {
-        if (!scheduleTable) return;
-        ensureTimeRows();
-        const tbody = scheduleTable.querySelector('tbody');
-        // assume data length matches times length (or fewer)
-        data.forEach((rowVals, idx) => {
-            const tr = tbody.children[idx];
-            if (!tr) return;
-            // skip time cell, fill rest
-            const cells = tr.querySelectorAll('td');
-            for (let j = 1; j < cells.length; j++) {
-                const td = cells[j];
-                const obj = rowVals[j-1] || {text:'',color:'#ffffff'};
-                td.setAttribute('data-subj', obj.text || '');
-                td.setAttribute('data-color', obj.color || '#ffffff');
-                td.style.backgroundColor = td.getAttribute('data-color');
+        if (!daysContainer) return;
+        ensureDayTables();
+        const dayTables = daysContainer.querySelectorAll('.day-table');
+        data.forEach((rowVals, ti) => {
+            for (let d = 0; d < dayTables.length; d++) {
+                const tr = dayTables[d].querySelectorAll('tbody tr')[ti];
+                if (!tr) continue;
+                const cell = tr.querySelector('.day-cell');
+                const obj = (rowVals && rowVals[d]) || {text:'', color:'#ffffff'};
+                cell.setAttribute('data-subj', obj.text || '');
+                cell.setAttribute('data-color', obj.color || '#ffffff');
+                cell.style.backgroundColor = cell.getAttribute('data-color');
             }
         });
     }
-
 
     // wire up buttons
     if (saveButton) {
@@ -168,29 +178,20 @@ window.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-
-    // delegate clicks to cells so modal opens reliably
-    if (scheduleTable) {
-        // make sure hour rows exist before anything else
-        ensureTimeRows();
-        scheduleTable.addEventListener('click', e => {
-            const td = e.target.closest('.sched-cell');
-            if (td) {
-                showCellModal(td);
-            }
-        });
-        // ensure initial cell backgrounds reflect stored color
-        scheduleTable.querySelectorAll('.sched-cell').forEach(td => {
-            td.style.backgroundColor = td.getAttribute('data-color');
+    // delegate clicks to day cells
+    if (daysContainer) {
+        ensureDayTables();
+        daysContainer.addEventListener('click', e => {
+            const cell = e.target.closest('.day-cell');
+            if (cell) showCellModal(cell);
         });
     }
-    
 
     if (scheduleresetbutton) {
         scheduleresetbutton.addEventListener('click', () => {
             if (confirm('Är du säker på att du vill rensa schemat? Detta kan inte ångras.')) {
                 // Clear all cells visually
-                const cells = scheduleTable.querySelectorAll('.sched-cell');
+                const cells = document.querySelectorAll('.day-cell');
                 cells.forEach(cell => {
                     cell.setAttribute('data-subj', '');
                     cell.setAttribute('data-color', '#ffffff');
@@ -208,7 +209,6 @@ window.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
-    
 
     // show whatever is already stored when page loads
     const initialData = JSON.parse(localStorage.getItem('schedule') || '[]');
