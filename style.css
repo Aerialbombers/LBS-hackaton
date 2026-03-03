@@ -2,7 +2,7 @@ body {
 font-size: 16px;
 font-family: 'Courier New';
 color: black;
-background-color: #a4ac86;
+background-color: beige;
 }
 
 
@@ -100,7 +100,7 @@ button.pomo-btn:hover {
 
 /* nav button styling */
 nav {
-    background-color: lightblue;
+    background-color: #a4ac86;
     font-size: 16px;
     font-family: 'Courier New';
     margin: auto;
