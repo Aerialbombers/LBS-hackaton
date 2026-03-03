@@ -142,36 +142,88 @@ nav button {
     margin-bottom: 5px;
 }
 
-.schedule-display {
-    margin-top: 8px;
-    font-size: 0.9em;
-    white-space: pre-wrap; /* preserve line breaks */
-    text-align: left;
-}
-
 /* schedule table styling */
 #scheduleTable {
     border-collapse: collapse;
     width: 100%;
     margin-bottom: 5px;
+    table-layout: fixed; /* distribute columns evenly */
 }
 
-#scheduleTable th, #scheduleTable td {
+/* keep time column narrow */
+#scheduleTable td:first-child,
+#scheduleTable th:first-child {
+    width: 60px;
+    white-space: nowrap;
+}
+
+/* cells display subject and background color */
+.sched-cell {
+    min-width: 80px;
+    min-height: 30px;
+    cursor: pointer;
+    vertical-align: middle;
+}
+
+.sched-cell::after {
+    content: attr(data-subj);
+    display: block;
+    width: 100%;
+    height: 100%;
+    padding: 2px;
+    box-sizing: border-box;
+    text-align: center;
+}
+
+/* cell edit modal adjustments */
+#cellModal .modal-content {
+    max-width: 300px;
+    text-align: center;
+}
+
+#cellModal label {
+    display: block;
+    margin: 8px 0;
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+#cellModal button {
+    margin: 5px;
+    padding: 5px 10px;
+}
+
+/* shrink subject input in modal */
+#modalSubj {
+    width: 105px; /* adjust desired width here */
+    padding: 2px;
+}
+#colorPalette {
+    margin: 5px 0;
+}
+
+.palette-color {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 1px solid #666;
+    margin-right: 4px;
+    cursor: pointer;
+}#scheduleTable th, #scheduleTable td {
     border: 1px solid #999;
     padding: 4px;
     text-align: center;
 }
 
-#scheduleTable input.subj {
-    width: 100%;
-    box-sizing: border-box;
-    padding: 2px;
-}
 
 #addRowButton {
     display: inline-block;
     margin-left: 10px;
 }
+
+/* color picker inside schedule cells */
+
 
 .schedule-container button {
     display: inline-block; /* sit side by side */
