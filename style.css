@@ -2,20 +2,8 @@ body {
 font-size: 16px;
 font-family: 'Times New Roman';
 color: black;
-background-color: #cef4ff;
+background-color: #a4ac86;
 }
-
-nav {
-    background-color: lightblue;
-    font-size: 16px;
-    font-family: sans-serif;
-    margin: auto;
-    padding: 0px;
-    text-align: center;
-    margin: 0px;
-}
-
-
 
 .input-text {
     width: 200px;
