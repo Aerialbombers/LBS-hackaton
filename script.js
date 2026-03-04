@@ -87,12 +87,12 @@ window.addEventListener('DOMContentLoaded', () => {
     const scheduleresetbutton = document.getElementById('scheduleresetbutton');
 
     // hours for schedule left column
-    const times = ['00:00','01:00','02:00','03:00','04:00','05:00','06:00','07:00','08:00','09:00','10:00','11:00','12:00','13:00','14:00','15:00','16:00','17:00','18:00','19:00','20:00','21:00','22:00','23:00'];
+    const times = ['tid','00:00','01:00','02:00','03:00','04:00','05:00','06:00','07:00','08:00','09:00','10:00','11:00','12:00','13:00','14:00','15:00','16:00','17:00','18:00','19:00','2O:OO', '21:OO', '22:OO', '23:OO'];
 
     // create per-day tables and time column
     function ensureDayTables() {
         if (!daysContainer || !timeColumn) return;
-        if (daysContainer.children.length > 0) return; // already built
+        if (daysContainer.children.length >  0) return; // already built
 
         // build time column labels
         times.forEach(t => {
