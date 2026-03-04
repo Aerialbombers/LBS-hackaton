@@ -18,6 +18,22 @@ nav {
     height: 50px;
     box-sizing: border-box;
 }
+nav h1 {
+    margin: 0;
+    font-size: 1.5em;
+    color: white;
+    flex: 1; /* take up remaining space to push buttons to right */
+    left: 50%;
+    transform: translateX(-50%);
+    position: absolute;
+}
+
+nav .logo {
+    height: 60px;
+    margin-left: 2px;
+    position: absolute;
+    left: 2px;
+}
 
 nav button {
     padding: 8px 16px;
@@ -171,7 +187,7 @@ nav button:hover {
 }
 
 .schedule-table {
-    min-width: 700px; /* ensure at least five day columns are visible */
+    min-width: 1000px; /* ensure at least five day columns are visible */
 }
 
 .schedule-table {
@@ -200,7 +216,7 @@ nav button:hover {
 
 .day-header {
     /* CUSTOMIZE: Change width to adjust header column size (currently 140px) */
-    width: 140px;
+    width: 180px;
     border: 1px solid #ddd;
     padding: 8px 2px;
     text-align: center;
