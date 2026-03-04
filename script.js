@@ -41,8 +41,8 @@ window.addEventListener('DOMContentLoaded', () => {
 
     function updateDayHeaders() {
         const dayHeaders = document.querySelectorAll('.day-header');
-        const dayNames = ['mån', 'tis', 'ons', 'tors', 'fre'];
-        for (let i = 0; i < 5; i++) {
+        const dayNames = ['mån', 'tis', 'ons', 'tors', 'fre', 'lör', 'sön'];
+        for (let i = 0; i < 7; i++) {
             const date = new Date(currentWeekStart);
             date.setDate(date.getDate() + i);
             const dayNum = date.getDate();
@@ -102,7 +102,7 @@ window.addEventListener('DOMContentLoaded', () => {
             timeColumn.appendChild(div);
         });
 
-        for (let d = 0; d < 5; d++) {
+        for (let d = 0; d < 7; d++) {
             const table = document.createElement('table');
             table.className = 'day-table';
             table.setAttribute('data-day', d);
