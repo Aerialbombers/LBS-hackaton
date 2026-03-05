@@ -458,7 +458,7 @@ window.addEventListener('DOMContentLoaded', () => {
     let miniYear = new Date().getFullYear();
 
     function renderMiniCalendar() {
-        const firstDay = new Date(miniYear, miniMonth, 1);
+        const firstDay = new Date(miniYear, miniMonth, - 0);
         const lastDay = new Date(miniYear, miniMonth + 1, 0);
         const daysInMonth = lastDay.getDate();
         const startingDayOfWeek = firstDay.getDay();
