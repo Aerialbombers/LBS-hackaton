@@ -65,6 +65,10 @@ nav button:hover {
     cursor: pointer;
 }
 
+#Frågor:hover{
+    background-color: #256dd9;
+}
+
 /* App container - flex layout with sidebar and main */
 .app-container {
     display: flex;
