@@ -234,6 +234,7 @@ window.addEventListener('DOMContentLoaded', () => {
     const modalColor = document.getElementById('modalColor');
     const modalSave = document.getElementById('modalSave');
     const modalCancel = document.getElementById('modalCancel');
+    const modalDelete = document.getElementById('modalDelete');
     let currentCell = null;
 
     // preset palette for quick color selection
@@ -298,7 +299,13 @@ window.addEventListener('DOMContentLoaded', () => {
     cellModal.addEventListener('click', (e) => {
         if (e.target === cellModal) hideCellModal();
     });
-
+    modalDelete.addEventListener('click', () => {
+        if (!currentCell) return;
+        currentCell.setAttribute('data-subj', '');
+        currentCell.setAttribute('data-color', '#ffffff');
+        currentCell.style.backgroundColor = '#ffffff';
+        hideCellModal();
+    });
 
     // hook up change listeners
     if (workInput) workInput.addEventListener('change', updateDurations);
