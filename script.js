@@ -470,7 +470,7 @@ window.addEventListener('DOMContentLoaded', () => {
         const daysInMonth = lastDay.getDate();
         const startingDayOfWeek = firstDay.getDay();
 
-        const monthNames = ['january', 'februar', 'mars', 'april', 'maj', 'juni', 'juli', 'augsti', 'september', 'oktober', 'november', 'december'];
+        const monthNames = ['januari', 'februari', 'mars', 'april', 'maj', 'juni', 'juli', 'augusti', 'september', 'oktober', 'november', 'december'];
         miniMonthYear.textContent = `${monthNames[miniMonth]} ${miniYear}`;
         miniCalendarBody.innerHTML = '';
 
