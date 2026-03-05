@@ -49,6 +49,22 @@ nav button:hover {
     background-color: #e8e8e8;
 }
 
+.chatbotruta{
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 10px;
+}
+
+.chatbotruta button{
+    padding: 8px;
+    border-radius: 6px;
+    border: none;
+    background-color: #2a7fff;
+    color: white;
+    cursor: pointer;
+}
+
 /* App container - flex layout with sidebar and main */
 .app-container {
     display: flex;
