@@ -515,6 +515,26 @@ window.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // Chatbot modal open/close
+    const aichat = document.getElementById("aichat");
+    const chatbotModal = document.getElementById("chatbotModal");
+    const chatbotClose = document.getElementById("chatbotClose");
+
+    aichat.addEventListener("click", () => {
+    chatbotModal.classList.remove("hidden");
+    });
+
+    chatbotClose.addEventListener("click", () => {
+    chatbotModal.classList.add("hidden");
+    });
+
+    // stäng om man klickar på bakgrunden (utanför rutan)
+    chatbotModal.addEventListener("click", (e) => {
+      if (e.target === chatbotModal) {
+        chatbotModal.classList.add("hidden");
+    }
+    });
+
     // Initial render
     renderMiniCalendar();
     updateWeekDisplay();
