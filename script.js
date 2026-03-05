@@ -235,6 +235,7 @@ window.addEventListener('DOMContentLoaded', () => {
     const modalSave = document.getElementById('modalSave');
     const modalCancel = document.getElementById('modalCancel');
     const modalDelete = document.getElementById('modalDelete');
+    const modalnextweek = document.getElementById('modalnextweek');
     let currentCell = null;
 
     // preset palette for quick color selection
@@ -306,6 +307,16 @@ window.addEventListener('DOMContentLoaded', () => {
         currentCell.style.backgroundColor = '#ffffff';
         hideCellModal();
     });
+
+    if (modalnextweek) {
+        modalnextweek.addEventListener('click', () => {
+            if (!currentCell) return;
+            const subj = modalSubj.value;
+            const color = modalColor.value;
+            const dayIndex = parseInt(currentCell.closest('.day-table').getAttribute('data-day'), 10);
+            const timeIndex = Array.from(currentCell.parentElement.parentElement.children).indexOf(currentCell.parentElement);
+        });
+    }
 
     // hook up change listeners
     if (workInput) workInput.addEventListener('change', updateDurations);
