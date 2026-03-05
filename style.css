@@ -65,6 +65,20 @@ nav button:hover {
     cursor: pointer;
 }
 
+.AIChat{
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    border: none;
+    background-color: #3498db;
+    color: white;
+    font-size: 15px;
+    cursor: pointer;
+    position: fixed;
+    right: 20px;
+    bottom: 20px;
+}
+
 #Frågor:hover{
     background-color: #256dd9;
 }
