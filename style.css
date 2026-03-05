@@ -229,6 +229,7 @@ nav button:hover {
     width: max-content;
     table-layout: fixed;
     margin-bottom: 0; /* sit flush above schedule table */
+    margin-left: 80px;
 }
 
 .day-header {
@@ -509,6 +510,7 @@ button.pomo-btn:hover {
     min-width: 80px;
     background: #f5f5f5;
     border-right: 1px solid #ddd;
+    margin-top: -50px;
 }
 
 .time-column .time-cell {
@@ -525,10 +527,16 @@ button.pomo-btn:hover {
 
 .scroll-area {
     flex: 1;
-    overflow-x: auto;
+    overflow: auto;
     display: flex;
     flex-direction: column;
     min-width: 0;
+}
+
+.schedule-body {
+    display: flex;
+    flex-direction: row;
+    min-width: max-content;
 }
 
 .days-container {
